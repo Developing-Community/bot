@@ -1,3 +1,6 @@
+#for telegram bot token and secrets
+config.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
