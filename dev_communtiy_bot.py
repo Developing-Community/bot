@@ -6,10 +6,11 @@ import datetime
 import json
 from pprint import pprint
 from config import TOKEN
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 start_msg = '''
 خوش آمدید 🙂✋️
 
-برای اتصال بات به پروفایلتان در سایت از  /login استفاده کنید.
+برای اتصال بات به پروفایلتان در سایت، دکمه زیر را فشار دهید. 👇
 '''
 
 def logadd(text):
@@ -27,8 +28,8 @@ def handle(msg) :
         elif content_type == 'text' :
 
             if msg['text'] == '/start':
-                bot.sendMessage(chat_id, start_msg, 'Markdown')
-            elif msg['text'] == '/login':
+                bot.sendMessage(chat_id, start_msg, 'Markdown', reply_markup = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='✅ اتصال به سایت')]]))
+            elif msg['text'] == '✅ اتصال به سایت':
                 try:
                     data = json.dumps({
                     'telegram_user_id': msg['from']['id']
