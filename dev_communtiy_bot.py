@@ -36,7 +36,7 @@ def handle(msg) :
                     response = requests.post('http://localhost/api/bot/create-token/',
                                              headers={"Content-type": "application/json"},
                                              data = data)
-                    bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['user_token']))
+                    bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['verify_token']))
                 except Exception as e:
                     logadd(e)
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
