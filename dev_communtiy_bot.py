@@ -38,8 +38,7 @@ def handle(msg) :
                                              data = data)
                     bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['verify_token']))
                 except Exception as e:
-                    logadd(e)
-                    print(e)
+                    logadd(str(e))
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
     elif chat_type in [u'group', u'supergroup'] :
         if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
