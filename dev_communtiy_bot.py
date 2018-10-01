@@ -23,7 +23,7 @@ def handle(msg) :
     #pprint(msg)
     if chat_type == u'private' :
         if 'forward_from' in msg :
-            logadd(msg['forward_from']['id'])
+            logadd(str(msg['forward_from']['id']))
         elif content_type == 'text' :
 
             if msg['text'] == '/start':
@@ -39,6 +39,7 @@ def handle(msg) :
                     bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['user_token']))
                 except Exception as e:
                     logadd(e)
+                    print(e)
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
     elif chat_type in [u'group', u'supergroup'] :
         if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
