@@ -2,6 +2,7 @@ import requests
 import telepot
 from telepot.loop import MessageLoop
 import time
+import datetime
 import json
 from pprint import pprint
 from config import TOKEN
@@ -10,6 +11,11 @@ start_msg = '''
 
 برای اتصال بات به پروفایلتان در سایت از  /login استفاده کنید.
 '''
+
+def logadd(text):
+    f = open("bot.log", "a")
+    f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
+    f.close()
 
 def handle(msg) :
     global start_msg
@@ -29,7 +35,7 @@ def handle(msg) :
                                              data = data)
                     bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['user_token']))
                 except Exception as e:
-                    print(e)
+                    logadd(e)
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
     elif chat_type in [u'group', u'supergroup'] :
         if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
