@@ -22,7 +22,10 @@ def handle(msg) :
     content_type, chat_type, chat_id = telepot.glance(msg)
     #pprint(msg)
     if chat_type == u'private' :
-        if content_type == 'text' :
+        if 'forward_from' in msg :
+            logadd(msg['forward_from']['id'])
+        elif content_type == 'text' :
+
             if msg['text'] == '/start':
                 bot.sendMessage(chat_id, start_msg, 'Markdown')
             elif msg['text'] == '/login':
