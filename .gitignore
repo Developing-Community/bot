@@ -1,6 +1,12 @@
 #for telegram bot token and secrets
 config.py
 
+#IDE files
+.vscode
+.idea
+*.sublime-workspace
+*.sublime-project
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
