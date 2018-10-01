@@ -1,6 +1,10 @@
 #for telegram bot token and secrets
 config.py
 
+#server files
+bot.log
+nohup.out
+
 #IDE files
 .vscode
 .idea
