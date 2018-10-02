@@ -5,7 +5,7 @@ import time
 import datetime
 import json
 from pprint import pprint
-from config import TOKEN
+from config import TOKEN, BOT_API_HOST_URL, HOST_URL
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 start_msg = '''
 خوش آمدید 🙂✋️
@@ -34,10 +34,10 @@ def handle(msg) :
                     data = json.dumps({
                     'telegram_user_id': msg['from']['id']
                     })
-                    response = requests.post('http://localhost/api/bot/create-token/',
+                    response = requests.post(BOT_API_HOST_URL + '/api/bot/create-token/',
                                              headers={"Content-type": "application/json"},
                                              data = data)
-                    bot.sendMessage(chat_id, 'https://dev-community.ir/verify-bot?token=' + str(response.json()['verify_token']))
+                    bot.sendMessage(chat_id, HOST_URL + 'verify-bot?token=' + str(response.json()['verify_token']))
                 except Exception as e:
                     logadd(str(e))
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
