@@ -6,10 +6,9 @@ import datetime
 import json
 from pprint import pprint
 from config import TOKEN, BOT_API_HOST_URL, HOST_URL
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 start_msg = '''
 خوش آمدید 🙂✋️
-
 برای اتصال بات به پروفایلتان در سایت، دکمه زیر را فشار دهید. 👇
 '''
 
@@ -18,26 +17,38 @@ def logadd(text):
     f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
     f.close()
 
+def creatToken(user_id) :
+    data = json.dumps({
+    'telegram_user_id': user_id
+    })
+    response = requests.post(url=BOT_API_HOST_URL + '/api/bot/create-token/',
+                             headers={"Content-type": "application/json"},
+                             data = data)
+    return str(response.json()['verify_token'])
+
+def findProfile(chat_id, user_id) :
+    response = requests.get(BOT_API_HOST_URL+'/apt/bot/%d/get-profile'%user_id)
+    if response.status_code == 200 :
+        link = response.json()['link']
+        bot.sendMessage(chat_id, link)
+    elif response.status_code == 404 :
+        bot.sendMessage(chat_id, 'چنین پروفایلی وجود ندارد!')
+    else :
+        logadd('response.status_code == ' + str(response.status_code))
+
 def handle(msg) :
     global start_msg
     content_type, chat_type, chat_id = telepot.glance(msg)
     #pprint(msg)
     if chat_type == u'private' :
         if 'forward_from' in msg :
-            logadd(str(msg['forward_from']['id']))
+            findProfile(chat_id, msg['forward_from']['id'])
         elif content_type == 'text' :
-
-            if msg['text'] == '/start':
-                bot.sendMessage(chat_id, start_msg, 'Markdown', reply_markup = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='✅ اتصال به سایت')]]))
-            elif msg['text'] == '✅ اتصال به سایت':
+            if msg['text'] == '/start' :
                 try:
-                    data = json.dumps({
-                    'telegram_user_id': msg['from']['id']
-                    })
-                    response = requests.post(BOT_API_HOST_URL + '/api/bot/create-token/',
-                                             headers={"Content-type": "application/json"},
-                                             data = data)
-                    bot.sendMessage(chat_id, HOST_URL + '/verify-bot?token=' + str(response.json()['verify_token']))
+                    token = creatToken(msg['from']['id'])
+                    url = HOST_URL + '/verify-token?token=' + token
+                    bot.sendMessage(chat_id, start_msg, 'Markdown', reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='✅ اتصال به سایت', url=url)]]))
                 except Exception as e:
                     logadd(str(e))
                     bot.sendMessage(chat_id, 'خطایی پیش آمده. لطفا دقایقی دیگر مجددا سعی کنید')
@@ -58,3 +69,4 @@ MessageLoop(bot, handle).run_as_thread()
 print('Ready...')
 while 1 :
     time.sleep(10)
+
