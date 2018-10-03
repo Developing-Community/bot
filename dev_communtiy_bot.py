@@ -16,7 +16,7 @@ def logadd(text):
     f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
     f.close()
 
-@application.route('/<int:user_id>/confirmed')
+@application.route('/<int:user_id>/confirmed/')
 def hello_world(user_id):
     try:
         bot.sendMessage(user_id, "تلگرام شما با موفقیت متصل شد")
