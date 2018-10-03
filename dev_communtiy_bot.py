@@ -7,15 +7,27 @@ import json
 from pprint import pprint
 from config import TOKEN, BOT_API_HOST_URL, HOST_URL
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-start_msg = '''
-خوش آمدید 🙂✋️
-برای اتصال بات به پروفایلتان در سایت، دکمه زیر را فشار دهید. 👇
-'''
+from flask import Flask
+app = Flask(__name__)
+
 
 def logadd(text):
     f = open("bot.log", "a")
     f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
     f.close()
+
+@app.route('/<int:user_id>/confirmed')
+def hello_world(user_id):
+    try:
+        bot.sendMessage(user_id, "تلگرام شما با موفقیت متصل شد")
+    except Exception as e:
+        logadd(str(e))
+    return ''
+
+start_msg = '''
+خوش آمدید 🙂✋️
+برای اتصال بات به پروفایلتان در سایت، دکمه زیر را فشار دهید. 👇
+'''
 
 def creatToken(user_id) :
     data = json.dumps({
@@ -65,8 +77,3 @@ def handle(msg) :
 
 bot = telepot.Bot(TOKEN)
 MessageLoop(bot, handle).run_as_thread()
-
-print('Ready...')
-while 1 :
-    time.sleep(10)
-
