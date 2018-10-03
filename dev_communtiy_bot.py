@@ -8,7 +8,7 @@ from pprint import pprint
 from config import TOKEN, BOT_API_HOST_URL, HOST_URL
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from flask import Flask
-app = Flask(__name__)
+application = Flask(__name__)
 
 
 def logadd(text):
@@ -16,7 +16,7 @@ def logadd(text):
     f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
     f.close()
 
-@app.route('/<int:user_id>/confirmed')
+@application.route('/<int:user_id>/confirmed')
 def hello_world(user_id):
     try:
         bot.sendMessage(user_id, "تلگرام شما با موفقیت متصل شد")
@@ -79,4 +79,4 @@ bot = telepot.Bot(TOKEN)
 MessageLoop(bot, handle).run_as_thread()
 
 if __name__ == "__main__":
-    app.run(host='localhost')
+    application.run(host='localhost')
