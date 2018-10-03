@@ -77,3 +77,6 @@ def handle(msg) :
 
 bot = telepot.Bot(TOKEN)
 MessageLoop(bot, handle).run_as_thread()
+
+if __name__ == "__main__":
+    app.run(host='localhost')
