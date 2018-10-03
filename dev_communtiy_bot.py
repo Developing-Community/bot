@@ -39,12 +39,12 @@ def creatToken(user_id) :
     return str(response.json()['verify_token'])
 
 def findProfile(chat_id, user_id) :
-    response = requests.get(BOT_API_HOST_URL+'/apt/bot/%d/get-profile'%user_id)
+    response = requests.get(BOT_API_HOST_URL+'/api/bot/%d/get-profile'%user_id)
     if response.status_code == 200 :
         link = response.json()['link']
         bot.sendMessage(chat_id, link)
     elif response.status_code == 404 :
-        bot.sendMessage(chat_id, 'چنین پروفایلی وجود ندارد!')
+        bot.sendMessage(chat_id, 'پروفایل مورد نظر پیدا نشد')
     else :
         logadd('response.status_code == ' + str(response.status_code))
 
