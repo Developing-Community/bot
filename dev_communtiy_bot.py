@@ -1,5 +1,6 @@
 import requests
 import telepot
+from flask.json import jsonify
 from telepot.loop import MessageLoop
 import time
 import datetime
@@ -8,26 +9,19 @@ from pprint import pprint
 from config import TOKEN, BOT_API_HOST_URL, HOST_URL
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 import os
-from flask import Flask
+from flask import Flask, request
+
 application = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 
 def logadd(text):
 
     f = open(os.path.join(BASE_DIR, "bot.log"), "a")
     f.write(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ") + text + '\n')
     f.close()
-
-@application.route('/<int:user_id>/confirmed/')
-def confirmed(user_id):
-    try:
-        bot.sendMessage(user_id, "تلگرام شما با موفقیت متصل شد")
-    except Exception as e:
-        logadd(str(e))
-    return ''
-
-
 
 
 def keyboard_maker(keyboard_texts):
@@ -39,6 +33,22 @@ def keyboard_maker(keyboard_texts):
             l.append(KeyboardButton(text = y))
         mykb.append(l)
     return mykb
+
+@application.route('/send-message/', methods=['POST'])
+def send_message():
+    data = json.loads(request.get_json(force=True))
+    keyboard = keyboard_maker(data['keyboard'])
+    for chat_id in data['chat_ids']:
+        bot.sendMessage(chat_id,
+                        data['message'],
+                        'Markdown',
+                        reply_markup = ReplyKeyboardMarkup(
+                            keyboard=keyboard
+                        ))
+    response = {
+        'status': 'success'
+    }
+    return jsonify(response)
 
 def handle_pv(msg):
     data = json.dumps({
