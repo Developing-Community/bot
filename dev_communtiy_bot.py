@@ -66,9 +66,18 @@ def handle_pv(msg):
                         keyboard=keyboard
                     ))
 
+def handle_gp(msg):
+    data = json.dumps({
+        'msg': msg
+    })
+    response = requests.post(url=BOT_API_HOST_URL + '/api/bot/handle-gp/',
+                             headers={"Content-type": "application/json"},
+                             data = data).json()
+
 
 def handle(msg) :
     global start_msg, users
+    print("sag")
     content_type, chat_type, chat_id = telepot.glance(msg)
     #pprint(msg)
     if chat_type == u'private' and content_type == 'text':
@@ -81,10 +90,10 @@ def handle(msg) :
             if msg['new_chat_member']['is_bot'] :
                 try :
                     bot.kickChatMember(chat_id, msg['from']['id'])
+                    bot.kickChatMember(chat_id, msg['new_chat_member']['id'])
                 except : # admin did it !
                     return # so it's OK !
-                bot.kickChatMember(chat_id, msg['new_chat_member']['id'])
-
+        handle_gp(msg)
 bot = telepot.Bot(TOKEN)
 MessageLoop(bot, handle).run_as_thread()
 
