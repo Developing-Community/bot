@@ -83,7 +83,7 @@ def handle(msg):
         handle_pv(msg)
 
     elif chat_type in [u'group', u'supergroup']:
-        if msg['from']['is_bot'] or 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg:
+        if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg:
             bot.deleteMessage((chat_id, msg['message_id']))
         if 'new_chat_member' in msg:
             if msg['new_chat_member']['is_bot']:
