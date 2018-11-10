@@ -91,8 +91,8 @@ def handle(msg) :
         if 'new_chat_member' in msg :
             if msg['new_chat_member']['is_bot'] :
                 try :
-                    bot.kickChatMember(chat_id, msg['from']['id'])
                     bot.kickChatMember(chat_id, msg['new_chat_member']['id'])
+                    bot.kickChatMember(chat_id, msg['from']['id'])
                 except : # admin did it !
                     return # so it's OK !
         handle_gp(msg)
