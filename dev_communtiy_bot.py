@@ -42,9 +42,10 @@ def send_message():
         bot.sendMessage(chat_id,
                         data['message'],
                         'Markdown',
-                        reply_markup = ReplyKeyboardMarkup(
-                            keyboard=keyboard
-                        ))
+                            reply_markup = ReplyKeyboardMarkup(
+                                keyboard=keyboard
+                            ),
+                        )
     response = {
         'status': 'success'
     }
@@ -84,7 +85,7 @@ def handle(msg) :
         handle_pv(msg)
 
     elif chat_type in [u'group', u'supergroup'] :
-        if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
+        if msg['from']['is_bot'] or 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
             bot.deleteMessage((chat_id, msg['message_id']))
         if 'new_chat_member' in msg :
             if msg['new_chat_member']['is_bot'] :
