@@ -1,15 +1,15 @@
-import requests
-import telepot
-from flask.json import jsonify
-from telepot.loop import MessageLoop
-import time
 import datetime
 import json
-from pprint import pprint
-from config import TOKEN, BOT_API_HOST_URL, HOST_URL, PROXY
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 import os
+
+import requests
+import telepot
 from flask import Flask, request
+from flask.json import jsonify
+from telepot.loop import MessageLoop
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+
+from config import TOKEN, BOT_API_HOST_URL, PROXY
 
 application = Flask(__name__)
 
@@ -79,14 +79,11 @@ def handle_gp(msg):
 def handle(msg) :
     global start_msg, users
     content_type, chat_type, chat_id = telepot.glance(msg)
-    #pprint(msg)
     if chat_type == u'private' and content_type == 'text':
         handle_pv(msg)
 
     elif chat_type in [u'group', u'supergroup'] :
-        pprint(msg)
         if msg['from']['is_bot'] or 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
-            pprint(msg)
             bot.deleteMessage((chat_id, msg['message_id']))
         if 'new_chat_member' in msg :
             if msg['new_chat_member']['is_bot'] :
