@@ -6,7 +6,7 @@ import time
 import datetime
 import json
 from pprint import pprint
-from config import TOKEN, BOT_API_HOST_URL, HOST_URL
+from config import TOKEN, BOT_API_HOST_URL, HOST_URL, PROXY
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 import os
 from flask import Flask, request
@@ -78,14 +78,15 @@ def handle_gp(msg):
 
 def handle(msg) :
     global start_msg, users
-    print("sag")
     content_type, chat_type, chat_id = telepot.glance(msg)
     #pprint(msg)
     if chat_type == u'private' and content_type == 'text':
         handle_pv(msg)
 
     elif chat_type in [u'group', u'supergroup'] :
+        pprint(msg)
         if msg['from']['is_bot'] or 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg :
+            pprint(msg)
             bot.deleteMessage((chat_id, msg['message_id']))
         if 'new_chat_member' in msg :
             if msg['new_chat_member']['is_bot'] :
@@ -95,9 +96,12 @@ def handle(msg) :
                 except : # admin did it !
                     return # so it's OK !
         handle_gp(msg)
+
+if PROXY:
+    telepot.api.set_proxy(PROXY)
+
 bot = telepot.Bot(TOKEN)
 MessageLoop(bot, handle).run_as_thread()
-
 if __name__ == "__main__":
     application.run(host='localhost')
 
