@@ -85,6 +85,7 @@ def handle(msg):
     elif chat_type in [u'group', u'supergroup']:
         if 'left_chat_member' in msg or 'new_chat_member' in msg or 'new_chat_members' in msg:
             bot.deleteMessage((chat_id, msg['message_id']))
+
         if 'new_chat_member' in msg:
             if msg['new_chat_member']['is_bot']:
                 try:
@@ -92,6 +93,11 @@ def handle(msg):
                     bot.kickChatMember(chat_id, msg['from']['id'])
                 except:  # admin did it !
                     pass  # so it's OK !
+
+        if content_type == 'document' :
+            if msg['document']['file_name'][-4:] == '.apk' :
+                bot.deleteMessage((chat_id, msg['message_id']))
+
         handle_gp(msg)
 
 
